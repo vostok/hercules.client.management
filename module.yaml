@@ -1,0 +1,17 @@
+notests *default:
+  build:
+    target: Vostok.Hercules.Client.Management.sln
+    configuration: NoTests
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.Hercules.Client.Management/bin/Release/netstandard2.0/Vostok.Hercules.Client.Management.dll
+
+  deps:
+    - vostok.devtools
+
+full-build > notests:
+  build:
+    target: Vostok.Hercules.Client.Management.sln
+    configuration: Release
