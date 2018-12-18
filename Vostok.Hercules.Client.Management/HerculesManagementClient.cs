@@ -19,6 +19,12 @@ namespace Vostok.Hercules.Client.Management
     {
         private ClusterClient client;
         private Func<string> getApiKey;
+        
+        private static JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore
+        };
 
         /// <inheritdoc cref="HerculesManagementClient"/>
         public HerculesManagementClient(HerculesManagementClientConfig config, ILog log)
@@ -38,12 +44,6 @@ namespace Vostok.Hercules.Client.Management
         /// <inheritdoc />
         public async Task<HerculesResult> CreateStreamAsync(CreateStreamQuery query, TimeSpan timeout)
         {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
             var dto = new StreamDescriptionDto(query.Description);
             
             Console.WriteLine(JsonConvert.SerializeObject(dto, settings));
