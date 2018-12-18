@@ -33,6 +33,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\netstandard2.0\Vostok.Logging.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Vostok.ClusterClient.Transport">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\vostok.clusterclient.transport\Vostok.ClusterClient.Transport\bin\Release\netstandard2.0\Vostok.ClusterClient.Transport.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

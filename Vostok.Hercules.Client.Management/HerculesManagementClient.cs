@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Core.Model;
 using Vostok.Clusterclient.Core.Topology;
+using Vostok.Clusterclient.Transport;
 using Vostok.Hercules.Client.Abstractions;
 using Vostok.Hercules.Client.Abstractions.Queries;
 using Vostok.Hercules.Client.Abstractions.Results;
@@ -38,6 +39,7 @@ namespace Vostok.Hercules.Client.Management
                 {
                     configuration.ClusterProvider = config.Cluster;
                     configuration.ServiceName = config.ServiceName;
+                    configuration.Transport = new UniversalTransport(log);
                 });
 
             getApiKey = config.ApiKeyProvider;

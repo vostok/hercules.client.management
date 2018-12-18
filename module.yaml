@@ -9,6 +9,7 @@ notests *default:
     - Vostok.Hercules.Client.Management/bin/Release/netstandard2.0/Vostok.Hercules.Client.Management.dll
 
   deps:
+    - vostok.clusterclient.transport
     - vostok.clusterclient.core
     - vostok.logging.abstractions
     - vostok.hercules.client.abstractions
