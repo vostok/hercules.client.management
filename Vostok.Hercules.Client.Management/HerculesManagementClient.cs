@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Core.Model;
-using Vostok.Clusterclient.Core.Topology;
 using Vostok.Clusterclient.Transport;
 using Vostok.Hercules.Client.Abstractions;
 using Vostok.Hercules.Client.Abstractions.Queries;
@@ -13,16 +13,6 @@ using Vostok.Logging.Abstractions;
 
 namespace Vostok.Hercules.Client.Management
 {
-    /// <summary>
-    /// Represents a settings of <see cref="HerculesManagementClient"/>.
-    /// </summary>
-    public class HerculesManagementClientConfig
-    {
-        public IClusterProvider Cluster { get; set; }
-        public Func<string> ApiKeyProvider { get; set; }
-        public string ServiceName { get; set; }
-    }
-
     /// <inheritdoc />
     [PublicAPI]
     public class HerculesManagementClient : IHerculesManagementClient
@@ -48,10 +38,21 @@ namespace Vostok.Hercules.Client.Management
         /// <inheritdoc />
         public async Task<HerculesResult> CreateStreamAsync(CreateStreamQuery query, TimeSpan timeout)
         {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            var dto = new StreamDescriptionDto(query.Description);
+            
+            Console.WriteLine(JsonConvert.SerializeObject(dto, settings));
+            
             var request = Request
                 .Post("streams/create")
                 .WithHeader("apiKey", getApiKey())
-                .WithContent(JsonConvert.SerializeObject(query.Description));
+                .WithHeader("Content-Type", "application/json")
+                .WithContent(JsonConvert.SerializeObject(dto, settings));
             
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
             

@@ -7,6 +7,7 @@ notests *default:
 
   install:
     - Vostok.Hercules.Client.Management/bin/Release/netstandard2.0/Vostok.Hercules.Client.Management.dll
+    - nuget Newtonsoft.Json/11.0.2
 
   deps:
     - vostok.clusterclient.transport
