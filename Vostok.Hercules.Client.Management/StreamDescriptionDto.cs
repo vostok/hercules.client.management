@@ -11,7 +11,7 @@ namespace Vostok.Hercules.Client.Management
             Name = description.Name;
             Type = description.Type.ToString().ToLowerInvariant();
             Partitions = description.Partitions;
-            TTL = (int) description.TTL.TotalMilliseconds;
+            TTL = (long) description.TTL.TotalMilliseconds;
             Sources = description.Sources;
             ShardingKey = description.ShardingKey ?? Array.Empty<string>();
         }
@@ -22,7 +22,7 @@ namespace Vostok.Hercules.Client.Management
 
         public int Partitions { get; set; }
 
-        public int TTL { get; set; }
+        public long TTL { get; set; }
         
         [CanBeNull]
         public string[] ShardingKey { get; set; }
