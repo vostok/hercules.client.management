@@ -45,9 +45,7 @@ namespace Vostok.Hercules.Client.Management
         public async Task<HerculesResult> CreateStreamAsync(CreateStreamQuery query, TimeSpan timeout)
         {
             var dto = new StreamDescriptionDto(query.Description);
-            
-            Console.WriteLine(JsonConvert.SerializeObject(dto, settings));
-            
+
             var request = Request
                 .Post("streams/create")
                 .WithHeader("apiKey", getApiKey())
