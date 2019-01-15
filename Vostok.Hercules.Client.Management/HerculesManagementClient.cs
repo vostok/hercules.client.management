@@ -34,7 +34,7 @@ namespace Vostok.Hercules.Client.Management
                 configuration =>
                 {
                     configuration.ClusterProvider = config.Cluster;
-                    configuration.ServiceName = config.ServiceName;
+                    configuration.TargetServiceName = config.ServiceName;
                     configuration.Transport = new UniversalTransport(log);
                 });
 
