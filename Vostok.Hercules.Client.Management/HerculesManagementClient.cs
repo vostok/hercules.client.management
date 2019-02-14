@@ -19,7 +19,7 @@ namespace Vostok.Hercules.Client.Management
     {
         private ClusterClient client;
         private Func<string> getApiKey;
-        
+
         private static JsonSerializerSettings settings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -51,13 +51,13 @@ namespace Vostok.Hercules.Client.Management
                 .WithHeader("apiKey", getApiKey())
                 .WithHeader("Content-Type", "application/json")
                 .WithContent(JsonConvert.SerializeObject(dto, settings));
-            
+
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
-            
+
             var herculesStatus = clusterResult.Status != ClusterResultStatus.Success
                 ? ConvertFailureToHerculesStatus(clusterResult.Status)
                 : ConvertResponseCodeToHerculesStatusForStream(clusterResult.Response.Code);
-            
+
             return new HerculesResult(herculesStatus);
         }
 
@@ -68,13 +68,13 @@ namespace Vostok.Hercules.Client.Management
                 .Post("timelines/create")
                 .WithHeader("apiKey", getApiKey())
                 .WithContent(JsonConvert.SerializeObject(query.Description));
-            
+
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
-            
+
             var herculesStatus = clusterResult.Status != ClusterResultStatus.Success
                 ? ConvertFailureToHerculesStatus(clusterResult.Status)
                 : ConvertResponseCodeToHerculesStatusForTimeline(clusterResult.Response.Code);
-            
+
             return new HerculesResult(herculesStatus);
         }
 
@@ -85,13 +85,13 @@ namespace Vostok.Hercules.Client.Management
                 .Post("streams/delete")
                 .WithAdditionalQueryParameter("stream", name)
                 .WithHeader("apiKey", getApiKey());
-            
+
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
-            
+
             var herculesStatus = clusterResult.Status != ClusterResultStatus.Success
                 ? ConvertFailureToHerculesStatus(clusterResult.Status)
                 : ConvertResponseCodeToHerculesStatusForStream(clusterResult.Response.Code);
-            
+
             return new DeleteStreamResult(herculesStatus);
         }
 
@@ -102,14 +102,33 @@ namespace Vostok.Hercules.Client.Management
                 .Post("timelines/delete")
                 .WithAdditionalQueryParameter("timeline", name)
                 .WithHeader("apiKey", getApiKey());
-            
+
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
-            
+
             var herculesStatus = clusterResult.Status != ClusterResultStatus.Success
                 ? ConvertFailureToHerculesStatus(clusterResult.Status)
                 : ConvertResponseCodeToHerculesStatusForTimeline(clusterResult.Response.Code);
-            
+
             return new DeleteTimelineResult(herculesStatus);
+        }
+
+        public async Task<HerculesResult<string[]>> ListStreamsAsync(TimeSpan timeout)
+        {
+            var request = Request
+                .Get("streams/list")
+                .WithHeader("apiKey", getApiKey());
+
+            var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
+
+            var herculesStatus = clusterResult.Status != ClusterResultStatus.Success
+                ? ConvertFailureToHerculesStatus(clusterResult.Status)
+                : clusterResult.Response.Code == ResponseCode.Ok
+                    ? HerculesStatus.Success
+                    : HerculesStatus.UnknownError;
+
+            return new HerculesResult<string[]>(
+                herculesStatus,
+                JsonConvert.DeserializeObject<string[]>(clusterResult.Response.Content.ToString()));
         }
 
         private static HerculesStatus ConvertFailureToHerculesStatus(ClusterResultStatus status)
