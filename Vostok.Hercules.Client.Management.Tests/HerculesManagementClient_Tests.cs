@@ -20,11 +20,10 @@ namespace Vostok.Hercules.Client.Management.Tests
             var apiKey = ""; //TODO
             
             var managementClient = new HerculesManagementClient(
-                new HerculesManagementClientSettings
-                {
-                    Cluster = new FixedClusterProvider(new Uri("http://vm-hercules05:6507")),
-                    ApiKeyProvider = () => apiKey
-                },
+                new HerculesManagementClientSettings(
+                    new FixedClusterProvider(
+                        new Uri("http://vm-hercules05:6507")),
+                    () => apiKey),
                 log);
 
             var stream = $"dotnet_test_{Guid.NewGuid().ToString().Substring(0, 8)}";

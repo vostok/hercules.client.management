@@ -8,6 +8,12 @@ namespace Vostok.Hercules.Client.Management
     /// </summary>
     public class HerculesManagementClientSettings
     {
+        public HerculesManagementClientSettings(IClusterProvider cluster, Func<string> apiKeyProvider)
+        {
+            Cluster = cluster ?? throw new ArgumentNullException(nameof(cluster));
+            ApiKeyProvider = apiKeyProvider ?? throw new ArgumentNullException(nameof(apiKeyProvider));
+        }
+
         public IClusterProvider Cluster { get; set; }
         public Func<string> ApiKeyProvider { get; set; }
     }
