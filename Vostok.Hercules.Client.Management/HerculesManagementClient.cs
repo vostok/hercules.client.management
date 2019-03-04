@@ -27,18 +27,18 @@ namespace Vostok.Hercules.Client.Management
         };
 
         /// <inheritdoc cref="HerculesManagementClient"/>
-        public HerculesManagementClient(HerculesManagementClientConfig config, ILog log)
+        public HerculesManagementClient(HerculesManagementClientSettings settings, ILog log)
         {
             client = new ClusterClient(
                 log,
                 configuration =>
                 {
-                    configuration.ClusterProvider = config.Cluster;
-                    configuration.TargetServiceName = config.ServiceName;
+                    configuration.ClusterProvider = settings.Cluster;
+                    configuration.TargetServiceName = "HerculesManagementApi";
                     configuration.Transport = new UniversalTransport(log);
                 });
 
-            getApiKey = config.ApiKeyProvider;
+            getApiKey = settings.ApiKeyProvider;
         }
 
         /// <inheritdoc />

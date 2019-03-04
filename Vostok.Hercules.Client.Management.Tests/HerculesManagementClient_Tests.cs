@@ -20,10 +20,9 @@ namespace Vostok.Hercules.Client.Management.Tests
             var apiKey = ""; //TODO
             
             var managementClient = new HerculesManagementClient(
-                new HerculesManagementClientConfig
+                new HerculesManagementClientSettings
                 {
                     Cluster = new FixedClusterProvider(new Uri("http://vm-hercules05:6507")),
-                    ServiceName = "HerculesManagementApi",
                     ApiKeyProvider = () => apiKey
                 },
                 log);
