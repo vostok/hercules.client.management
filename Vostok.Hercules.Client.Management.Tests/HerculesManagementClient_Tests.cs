@@ -28,12 +28,12 @@ namespace Vostok.Hercules.Client.Management.Tests
 
             var stream = $"dotnet_test_{Guid.NewGuid().ToString().Substring(0, 8)}";
 
-            managementClient.CreateStreamAsync(new CreateStreamQuery(new StreamDescription(stream)
+            managementClient.CreateStreamAsync(new CreateStreamQuery(stream)
                 {
                     Type = StreamType.Base,
                     Partitions = 1,
                     TTL = 1.Hours()
-                }), 5.Seconds())
+                }, 5.Seconds())
                 .GetAwaiter()
                 .GetResult()
                 .Status.Should()

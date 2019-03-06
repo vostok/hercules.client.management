@@ -1,33 +1,37 @@
 using System;
 using JetBrains.Annotations;
 using Vostok.Hercules.Client.Abstractions.Models;
+using Vostok.Hercules.Client.Abstractions.Queries;
 
 namespace Vostok.Hercules.Client.Management
 {
     internal class StreamDescriptionDto
     {
-        public StreamDescriptionDto(StreamDescription description)
+        private const int DefaultPartitionsCount = 3;
+        private static readonly TimeSpan DefaultTTL = TimeSpan.FromDays(3);
+        
+        public StreamDescriptionDto(CreateStreamQuery query)
         {
-            Name = description.Name;
-            Type = description.Type.ToString().ToLowerInvariant();
-            Partitions = description.Partitions;
-            TTL = (long) description.TTL.TotalMilliseconds;
-            Sources = description.Sources;
-            ShardingKey = description.ShardingKey ?? Array.Empty<string>();
+            Name = query.Name;
+            Type = query.Type.ToString().ToLowerInvariant();
+            Partitions = query.Partitions ?? DefaultPartitionsCount;
+            TTL = (long) (query.TTL ?? DefaultTTL).TotalMilliseconds;
+            Sources = query.Sources;
+            ShardingKey = query.ShardingKey ?? Array.Empty<string>();
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Type { get; set; }
+        public string Type { get; }
 
-        public int Partitions { get; set; }
+        public int Partitions { get; }
 
-        public long TTL { get; set; }
+        public long TTL { get; }
         
         [CanBeNull]
-        public string[] ShardingKey { get; set; }
+        public string[] ShardingKey { get; }
     
         [CanBeNull]
-        public string[] Sources { get; set; }
+        public string[] Sources { get; }
     }
 }

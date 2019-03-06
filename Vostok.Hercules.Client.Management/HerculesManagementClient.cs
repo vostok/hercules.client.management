@@ -7,6 +7,7 @@ using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Core.Model;
 using Vostok.Clusterclient.Transport;
 using Vostok.Hercules.Client.Abstractions;
+using Vostok.Hercules.Client.Abstractions.Models;
 using Vostok.Hercules.Client.Abstractions.Queries;
 using Vostok.Hercules.Client.Abstractions.Results;
 using Vostok.Logging.Abstractions;
@@ -44,7 +45,7 @@ namespace Vostok.Hercules.Client.Management
         /// <inheritdoc />
         public async Task<HerculesResult> CreateStreamAsync(CreateStreamQuery query, TimeSpan timeout)
         {
-            var dto = new StreamDescriptionDto(query.Description);
+            var dto = new StreamDescriptionDto(query);
 
             var request = Request
                 .Post("streams/create")
@@ -67,7 +68,7 @@ namespace Vostok.Hercules.Client.Management
             var request = Request
                 .Post("timelines/create")
                 .WithHeader("apiKey", getApiKey())
-                .WithContent(JsonConvert.SerializeObject(query.Description));
+                .WithContent(JsonConvert.SerializeObject(new TimelineDescriptionDto(query)));
 
             var clusterResult = await client.SendAsync(request, timeout).ConfigureAwait(false);
 
@@ -112,6 +113,12 @@ namespace Vostok.Hercules.Client.Management
             return new DeleteTimelineResult(herculesStatus);
         }
 
+        public Task<HerculesResult<StreamDescription>> GetStreamDescriptionAsync(string name, TimeSpan timeout) =>
+            throw new NotImplementedException();
+
+        public Task<HerculesResult<TimelineDescription>> GetTimelineDescriptionAsync(string name, TimeSpan timeout) =>
+            throw new NotImplementedException();
+
         public async Task<HerculesResult<string[]>> ListStreamsAsync(TimeSpan timeout)
         {
             var request = Request
@@ -130,6 +137,9 @@ namespace Vostok.Hercules.Client.Management
                 herculesStatus,
                 JsonConvert.DeserializeObject<string[]>(clusterResult.Response.Content.ToString()));
         }
+
+        public Task<HerculesResult<string[]>> ListTimelinesAsync(TimeSpan timeout) =>
+            throw new NotImplementedException();
 
         private static HerculesStatus ConvertFailureToHerculesStatus(ClusterResultStatus status)
         {
