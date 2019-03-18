@@ -15,7 +15,7 @@ using Vostok.Logging.Abstractions;
 namespace Vostok.Hercules.Client.Management
 {
     /// <inheritdoc />
-    [PublicAPI]
+    [PublicAPI, Obsolete("vostok.hercules.client.management module is obsolete. Use HerculesManagementClient from vostok.hercules.client module.", true)]
     public class HerculesManagementClient : IHerculesManagementClient
     {
         private ClusterClient client;
